@@ -125,7 +125,7 @@ export default function LandingPage() {
             <span>Developer: <strong>Dhruvesh Borad</strong></span>
             <a href="https://github.com/dhruveshborad" target="_blank" rel="noreferrer" className="hover:text-neutral-300 transition-colors">GitHub Profile</a>
             <a href="https://www.linkedin.com/in/dhruveshkumar-borad" target="_blank" rel="noreferrer" className="hover:text-neutral-300 transition-colors">LinkedIn Profile</a>
-            <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-neutral-300 transition-colors">Repository Link</a>
+            <a href="https://github.com/dhruveshborad/housetecheditor" target="_blank" rel="noreferrer" className="hover:text-neutral-300 transition-colors">Repository Link</a>
           </div>
         </div>
       </footer>
