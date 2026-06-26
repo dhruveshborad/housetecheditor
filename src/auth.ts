@@ -15,6 +15,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     google({
       clientId: process.env.GOOGLE_ID || 'mock',
       clientSecret: process.env.GOOGLE_SECRET || 'mock',
+      allowDangerousEmailAccountLinking: true,
     }),
     credentials({
       name: 'credentials',
