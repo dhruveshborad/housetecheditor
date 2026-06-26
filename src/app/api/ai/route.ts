@@ -101,18 +101,19 @@ ${content}`;
       action,
       result: text.trim(),
     });
-  } catch (error: any) {
+  } catch (error) {
+    const err = error as Error & { stack?: string };
     console.error('========== AI ERROR ==========');
-    console.error(error);
+    console.error(err);
 
     return Response.json(
       {
         success: false,
-        error: error?.message || 'Unknown error',
-        details: error?.toString?.(),
+        error: err?.message || 'Unknown error',
+        details: err?.toString?.(),
         stack:
           process.env.NODE_ENV === 'development'
-            ? error?.stack
+            ? err?.stack
             : undefined,
       },
       { status: 500 }

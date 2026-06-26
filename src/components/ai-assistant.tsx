@@ -1,9 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FilePen, X, Loader2, Copy, Check, RotateCcw, Wand2, BookOpen, PenLine, SpellCheck } from 'lucide-react';
+import { FilePen, X, Loader2, Copy, Check, RotateCcw, Wand2, BookOpen, SpellCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Block } from '@/lib/conflict/merge';
+
+interface EditorNode {
+  type: string;
+  text?: string;
+  content?: EditorNode[];
+}
 
 interface AIAssistantProps {
   blocks: Block[];
@@ -60,7 +66,7 @@ function blocksToPlainText(blocks: Block[]): string {
     .map((block) => {
       try {
         const contentArr = JSON.parse(block.content || '[]');
-        const extractText = (nodes: any[]): string =>
+        const extractText = (nodes: EditorNode[]): string =>
           nodes.map((node) => {
             if (node.type === 'text') return node.text || '';
             if (node.content) return extractText(node.content);
@@ -116,7 +122,7 @@ export function AIAssistant({ blocks, onClose }: AIAssistantProps) {
       } else {
         setError(data.error || 'AI request failed. Please try again.');
       }
-    } catch (e) {
+    } catch {
       setError('Could not reach AI service. Check your connection.');
     } finally {
       setLoading(false);
@@ -136,7 +142,6 @@ export function AIAssistant({ blocks, onClose }: AIAssistantProps) {
   };
 
   const currentAction = AI_ACTIONS.find((a) => a.id === selectedAction)!;
-  const ActionIcon = currentAction.icon;
 
   return (
     <>

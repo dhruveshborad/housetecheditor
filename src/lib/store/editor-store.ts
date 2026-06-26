@@ -44,8 +44,8 @@ interface EditorState {
   loadDocument: (docId: string) => Promise<void>;
   unloadDocument: () => void;
   editTitle: (title: string) => Promise<void>;
-  insertBlock: (blockId: string, type: string, content: string, prevId: string | null, attrs?: Record<string, any>) => Promise<void>;
-  updateBlock: (blockId: string, type: string, content: string, attrs?: Record<string, any>) => Promise<void>;
+  insertBlock: (blockId: string, type: string, content: string, prevId: string | null, attrs?: Record<string, unknown>) => Promise<void>;
+  updateBlock: (blockId: string, type: string, content: string, attrs?: Record<string, unknown>) => Promise<void>;
   deleteBlock: (blockId: string) => Promise<void>;
   moveBlock: (blockId: string, prevId: string | null) => Promise<void>;
   createVersion: (authorId: string, changeSummary: string) => Promise<string>;
@@ -310,7 +310,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   },
 
   insertBlock: async (blockId, type, content, prevId, attrs) => {
-    const { currentDocument, clientId, lamportTimestamp, blocks } = get();
+    const { currentDocument, clientId, lamportTimestamp } = get();
     if (!currentDocument || !localDb) return;
     if (currentDocument.userRole === 'VIEWER') return;
 

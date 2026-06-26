@@ -8,7 +8,16 @@ export interface Block {
   deleted?: boolean;
   lamportTimestamp?: number;
   clientId?: string;
-  attrs?: Record<string, any>;
+  attrs?: Record<string, unknown>;
+}
+
+export interface OperationPayload {
+  title?: string;
+  blockId?: string;
+  type?: string;
+  content?: string;
+  prevId?: string | null;
+  attrs?: Record<string, unknown>;
 }
 
 export interface MergeResult {
@@ -42,7 +51,7 @@ export function mergeOperations(
 
   // Map to hold the state of blocks
   const blocksMap = new Map<string, Block>();
-  
+
   // Seed the map with initial blocks
   for (const block of initialBlocks) {
     blocksMap.set(block.id, { ...block, deleted: false });
@@ -52,9 +61,9 @@ export function mergeOperations(
 
   // Apply operations sequentially
   for (const op of sortedOps) {
-    let payload: any;
+    let payload: OperationPayload | null = null;
     try {
-      payload = typeof op.payload === 'string' ? JSON.parse(op.payload) : op.payload;
+      payload = typeof op.payload === 'string' ? JSON.parse(op.payload) : (op.payload as OperationPayload);
     } catch (e) {
       console.error('Failed to parse operation payload:', op, e);
       continue;
@@ -135,7 +144,7 @@ export function mergeOperations(
   }
 
   // Sort children sharing the same prevId
-  for (const [parentId, children] of childrenMap.entries()) {
+  for (const children of childrenMap.values()) {
     children.sort((a, b) => {
       const aTime = a.lamportTimestamp || 0;
       const bTime = b.lamportTimestamp || 0;

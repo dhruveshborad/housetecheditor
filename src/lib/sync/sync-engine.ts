@@ -1,4 +1,4 @@
-import { localDb, type LocalOperation, type LocalSyncQueue } from '../dexie/db';
+import { localDb } from '../dexie/db';
 import { useEditorStore, registerSyncTrigger } from '../store/editor-store';
 
 class BackgroundSyncEngine {
@@ -174,8 +174,9 @@ class BackgroundSyncEngine {
       } else {
         throw new Error('Malformed server response');
       }
-    } catch (error: any) {
-      console.error('Background sync failed:', error);
+    } catch (error) {
+      const err = error as Error;
+      console.error('Background sync failed:', err);
       
       // Update items in queue to FAILED status
       if (localDb) {
@@ -192,7 +193,7 @@ class BackgroundSyncEngine {
             .modify(item => {
               item.status = 'FAILED';
               item.retryCount += 1;
-              item.error = error.message || 'Network error';
+              item.error = err.message || 'Network error';
             });
         }
       }

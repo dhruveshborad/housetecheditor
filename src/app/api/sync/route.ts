@@ -20,12 +20,13 @@ const syncPayloadSchema = z.object({
 /**
  * Checks the nesting depth of a parsed JSON value to prevent stack overflows / DOS.
  */
-function getJsonDepth(val: any): number {
+function getJsonDepth(val: unknown): number {
   if (val === null || typeof val !== 'object') return 0;
+  const obj = val as Record<string, unknown>;
   let maxDepth = 0;
-  for (const key in val) {
-    if (Object.prototype.hasOwnProperty.call(val, key)) {
-      maxDepth = Math.max(maxDepth, getJsonDepth(val[key]));
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      maxDepth = Math.max(maxDepth, getJsonDepth(obj[key]));
     }
   }
   return 1 + maxDepth;
@@ -108,10 +109,10 @@ export async function POST(req: Request) {
         }
 
         // Nesting depth check on operation payload string to protect merge engine
-        let parsedPayload: any;
+        let parsedPayload: unknown;
         try {
           parsedPayload = JSON.parse(op.payload);
-        } catch (e) {
+        } catch {
           throw new Error(`Malformed JSON in operation payload: ${op.operationId}`);
         }
 
@@ -167,7 +168,7 @@ export async function POST(req: Request) {
       documentId: op.documentId,
       clientId: op.clientId,
       lamportTimestamp: op.lamportTimestamp,
-      operationType: op.operationType as any,
+      operationType: op.operationType as 'INSERT_BLOCK' | 'UPDATE_BLOCK' | 'DELETE_BLOCK' | 'MOVE_BLOCK' | 'SET_TITLE',
       payload: op.payload,
       createdAt: op.createdAt.getTime(),
       isSynced: 1,
@@ -178,9 +179,10 @@ export async function POST(req: Request) {
       syncedIds,
       newOperations: formattedNewOps,
     });
-  } catch (error: any) {
-    console.error('API sync execution failed:', error);
-    return Response.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+  } catch (error) {
+    const err = error as Error;
+    console.error('API sync execution failed:', err);
+    return Response.json({ error: err.message || 'Internal Server Error' }, { status: 500 });
   }
 }
 
@@ -235,7 +237,7 @@ export async function GET(req: Request) {
       documentId: op.documentId,
       clientId: op.clientId,
       lamportTimestamp: op.lamportTimestamp,
-      operationType: op.operationType as any,
+      operationType: op.operationType as 'INSERT_BLOCK' | 'UPDATE_BLOCK' | 'DELETE_BLOCK' | 'MOVE_BLOCK' | 'SET_TITLE',
       payload: op.payload,
       createdAt: op.createdAt.getTime(),
       isSynced: 1,
@@ -245,7 +247,7 @@ export async function GET(req: Request) {
       success: true,
       newOperations: formattedNewOps,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('API sync pull failed:', error);
     return Response.json({ error: 'Internal Server Error' }, { status: 500 });
   }

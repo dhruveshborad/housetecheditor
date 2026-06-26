@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useEditor, EditorContent, Editor as TiptapEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import ImageExtension from '@tiptap/extension-image';
@@ -22,7 +22,7 @@ interface EditorProps {
 }
 
 interface EditorToolbarProps {
-  editor: any;
+  editor: TiptapEditor | null;
 }
 
 function EditorToolbar({ editor }: EditorToolbarProps) {
@@ -195,7 +195,9 @@ export function Editor({ documentId }: EditorProps) {
 
   // Initialize and load the document from local IndexedDB
   useEffect(() => {
-    setLoading(true);
+    Promise.resolve().then(() => {
+      setLoading(true);
+    });
     loadDocument(documentId).then(() => {
       setLoading(false);
     });
@@ -205,7 +207,7 @@ export function Editor({ documentId }: EditorProps) {
   }, [documentId, loadDocument, unloadDocument]);
 
   // Convert store blocks to TipTap JSON structure
-  const getEditorJsonFromBlocks = (blockList: typeof blocks) => {
+  const getEditorJsonFromBlocks = useCallback((blockList: typeof blocks) => {
     return {
       type: 'doc',
       content: blockList.map(b => {
@@ -213,7 +215,7 @@ export function Editor({ documentId }: EditorProps) {
         if (b.content) {
           try {
             contentArray = JSON.parse(b.content);
-          } catch (e) {
+          } catch {
             contentArray = [{ type: 'text', text: b.content }];
           }
         }
@@ -227,7 +229,7 @@ export function Editor({ documentId }: EditorProps) {
         };
       }),
     };
-  };
+  }, []);
 
   const editor = useEditor({
     editable: isEditable,
@@ -279,7 +281,8 @@ export function Editor({ documentId }: EditorProps) {
           const blockId = eBlock.attrs!.id;
           const blockType = eBlock.type || 'paragraph';
           const blockContent = JSON.stringify(eBlock.content || []);
-          const { id, ...blockAttrs } = eBlock.attrs || {};
+          const blockAttrs = { ...(eBlock.attrs || {}) };
+          delete blockAttrs.id;
           const expectedPrevId = lastId;
 
           const sBlock = storeBlocks.find(b => b.id === blockId);
@@ -349,7 +352,8 @@ export function Editor({ documentId }: EditorProps) {
         const sBlock = blocks[i];
         const eNode = editorNodes[i];
         const eNodeContent = JSON.stringify(eNode.content || []);
-        const { id, ...eNodeAttrs } = eNode.attrs || {};
+        const eNodeAttrs = { ...(eNode.attrs || {}) };
+        delete eNodeAttrs.id;
 
         if (
           eNode.attrs?.id !== sBlock.id ||
@@ -398,7 +402,7 @@ export function Editor({ documentId }: EditorProps) {
         if (newPos !== -1 && newPos >= 0 && newPos <= editor.state.doc.content.size) {
           try {
             editor.commands.setTextSelection(newPos);
-          } catch (e) {
+          } catch {
             // Ignore selection out of bounds or invalid states
           }
         }
@@ -406,7 +410,7 @@ export function Editor({ documentId }: EditorProps) {
 
       isUpdatingRef.current = false;
     }
-  }, [blocks, editor, loading, currentDocument]);
+  }, [blocks, editor, loading, currentDocument, getEditorJsonFromBlocks]);
 
   if (loading || !editor) {
     return (

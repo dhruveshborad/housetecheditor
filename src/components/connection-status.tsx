@@ -2,15 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 import { useEditorStore } from '@/lib/store/editor-store';
-import { Wifi, WifiOff, CloudLightning, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react';
+import { Wifi, WifiOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function ConnectionStatus() {
   const {
     networkStatus,
-    syncStatus,
-    pendingOpsCount,
-    failedOpsCount,
     lastSyncTime,
     initialize,
     setNetworkStatus,
@@ -37,7 +34,9 @@ export function ConnectionStatus() {
   // Update "last sync" relative time string
   useEffect(() => {
     if (!lastSyncTime) {
-      setTimeAgo('Never');
+      Promise.resolve().then(() => {
+        setTimeAgo('Never');
+      });
       return;
     }
 

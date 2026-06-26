@@ -9,10 +9,30 @@ import { useEditorStore } from '@/lib/store/editor-store';
 import { ConnectionStatus } from '@/components/connection-status';
 import {
   FileText, Plus, Database, LogOut,
-  Settings, User, FilePen, FolderOpen, RefreshCcw,
-  AlertCircle, ShieldCheck, Activity, Layers
+  FilePen, FolderOpen, RefreshCcw,
+  ShieldCheck, Activity, Layers
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+interface Workspace {
+  id: string;
+  name: string;
+  ownerId: string;
+  createdAt: string;
+}
+
+interface MergedDocument {
+  id: string;
+  title: string;
+  workspaceId: string;
+  createdBy: string;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+  source: string;
+  isDirty: boolean;
+  userRole: string;
+}
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
@@ -25,9 +45,9 @@ export default function Dashboard() {
     initialize,
   } = useEditorStore();
 
-  const [workspaces, setWorkspaces] = useState<any[]>([]);
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [selectedWorkspaceId, setSelectedWorkspaceId] = useState<string>('');
-  const [documents, setDocuments] = useState<any[]>([]);
+  const [documents, setDocuments] = useState<MergedDocument[]>([]);
   const [storageUsage, setStorageUsage] = useState({ used: '0 KB', percentage: 0 });
   const [loading, setLoading] = useState(true);
 
@@ -38,7 +58,7 @@ export default function Dashboard() {
   const [newDocTitle, setNewDocTitle] = useState('');
 
   // Fetch data
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (status !== 'authenticated') return;
     setLoading(true);
 
@@ -55,7 +75,7 @@ export default function Dashboard() {
 
       // 2. Fetch server-synced documents
       const docRes = await fetch('/api/documents');
-      let serverDocs: any[] = [];
+      let serverDocs: MergedDocument[] = [];
       if (docRes.ok) {
         const docData = await docRes.json();
         serverDocs = docData.documents || [];
@@ -68,7 +88,7 @@ export default function Dashboard() {
       }
 
       // 4. Merge server and local documents
-      const mergedDocsMap = new Map<string, any>();
+      const mergedDocsMap = new Map<string, MergedDocument>();
 
       // Seed with server docs
       for (const sDoc of serverDocs) {
@@ -82,7 +102,7 @@ export default function Dashboard() {
       // Merge local docs (adds offline-created docs, flags dirty ones)
       for (const lDoc of localDocs) {
         if (mergedDocsMap.has(lDoc.id)) {
-          const merged = mergedDocsMap.get(lDoc.id);
+          const merged = mergedDocsMap.get(lDoc.id)!;
           mergedDocsMap.set(lDoc.id, {
             ...merged,
             title: lDoc.title, // Use local title if newer
@@ -112,7 +132,7 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [status, selectedWorkspaceId]);
 
   useEffect(() => {
     initialize();
@@ -122,9 +142,11 @@ export default function Dashboard() {
     if (status === 'unauthenticated') {
       router.push('/auth/login');
     } else if (status === 'authenticated') {
-      fetchData();
+      Promise.resolve().then(() => {
+        fetchData();
+      });
     }
-  }, [status, selectedWorkspaceId]);
+  }, [status, selectedWorkspaceId, fetchData, router]);
 
   // Compute IndexedDB storage utilization stats
   useEffect(() => {

@@ -3,6 +3,15 @@ import { db } from '@/lib/db';
 import { z } from 'zod';
 import type { Block } from '@/lib/conflict/merge';
 
+interface RestoreOperation {
+  operationId: string;
+  documentId: string;
+  clientId: string;
+  lamportTimestamp: number;
+  operationType: 'INSERT_BLOCK' | 'UPDATE_BLOCK' | 'DELETE_BLOCK' | 'MOVE_BLOCK' | 'SET_TITLE';
+  payload: string;
+}
+
 const restoreSchema = z.object({
   documentId: z.string().uuid(),
   versionId: z.string().uuid(),
@@ -80,7 +89,7 @@ export async function POST(req: Request) {
     });
     let baseTimestamp = (lastOp?.lamportTimestamp || 0) + 1;
 
-    const restoreOpsToCreate: any[] = [];
+    const restoreOpsToCreate: RestoreOperation[] = [];
     const clientId = 'server-restore-client';
 
     const currentBlockMap = new Map<string, Block>(currentBlocks.map(b => [b.id, b]));

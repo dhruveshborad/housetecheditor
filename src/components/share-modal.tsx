@@ -51,7 +51,7 @@ export function ShareModal({ documentId, onClose }: ShareModalProps) {
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
-  const fetchMembers = async () => {
+  const fetchMembers = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch(`/api/documents/${documentId}/members`);
@@ -64,11 +64,13 @@ export function ShareModal({ documentId, onClose }: ShareModalProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [documentId]);
 
   useEffect(() => {
-    fetchMembers();
-  }, [documentId]);
+    Promise.resolve().then(() => {
+      fetchMembers();
+    });
+  }, [fetchMembers]);
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,7 +99,7 @@ export function ShareModal({ documentId, onClose }: ShareModalProps) {
       } else {
         setError(data.error || 'Failed to add member');
       }
-    } catch (e) {
+    } catch {
       setError('Network error. Please try again.');
     } finally {
       setIsInviting(false);
@@ -122,7 +124,7 @@ export function ShareModal({ documentId, onClose }: ShareModalProps) {
         const data = await res.json();
         setError(data.error || 'Failed to remove member');
       }
-    } catch (e) {
+    } catch {
       setError('Network error. Please try again.');
     } finally {
       setRemovingId(null);

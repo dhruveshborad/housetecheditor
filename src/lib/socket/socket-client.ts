@@ -2,6 +2,15 @@ import { io, type Socket } from 'socket.io-client';
 import { useEditorStore } from '../store/editor-store';
 import type { LocalOperation } from '../dexie/db';
 
+interface PresenceUser {
+  userId: string;
+  name: string;
+  email: string;
+  avatar: string;
+  color: string;
+  typing: boolean;
+}
+
 class DocumentSocketClient {
   private socket: Socket | null = null;
   private currentDocId: string | null = null;
@@ -39,9 +48,7 @@ class DocumentSocketClient {
     });
 
     // Handle collaborators list updates
-    this.socket.on('presence-update', (users: any[]) => {
-      const { clientId } = useEditorStore.getState();
-      
+    this.socket.on('presence-update', (users: PresenceUser[]) => {
       // Filter out current client from collaborator list
       const collaborators = users
         .filter(u => u.userId !== user.id) // Filter by user ID

@@ -10,7 +10,7 @@ const createWorkspaceSchema = z.object({
  * GET /api/workspaces
  * Fetches all workspaces owned by the current user.
  */
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const session = await auth();
     if (!session || !session.user?.id) {

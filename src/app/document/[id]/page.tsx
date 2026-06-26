@@ -11,8 +11,8 @@ import { ConnectionStatus } from '@/components/connection-status';
 import { ShareModal } from '@/components/share-modal';
 import { AIAssistant } from '@/components/ai-assistant';
 import {
-  ArrowLeft, History, Plus, Clock, FilePen,
-  Users, X, ChevronRight, Loader2, Share2
+  ArrowLeft, History, FilePen,
+  X, Loader2, Share2
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -28,7 +28,6 @@ export default function DocumentEditorPage() {
     currentDocument,
     blocks,
     activeCollaborators,
-    createVersion,
     editTitle,
     accessDenied,
   } = useEditorStore();
@@ -37,11 +36,6 @@ export default function DocumentEditorPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [aiPanelOpen, setAiPanelOpen] = useState(false);
-  const [versions, setVersions] = useState<any[]>([]);
-  const [loadingVersions, setLoadingVersions] = useState(false);
-  const [isCreatingSnapshot, setIsCreatingSnapshot] = useState(false);
-  const [snapshotSummary, setSnapshotSummary] = useState('');
-  const [previewingSnapshot, setPreviewingSnapshot] = useState<any | null>(null);
 
   // Initialize and run sync engine
   useEffect(() => {
@@ -70,7 +64,9 @@ export default function DocumentEditorPage() {
   // Bind title input when document loads
   useEffect(() => {
     if (currentDocument) {
-      setTitleInput(currentDocument.title);
+      Promise.resolve().then(() => {
+        setTitleInput(currentDocument.title);
+      });
     }
   }, [currentDocument]);
 
@@ -78,90 +74,6 @@ export default function DocumentEditorPage() {
     const val = e.target.value;
     setTitleInput(val);
     editTitle(val); // Optimistic title update
-  };
-
-  // Fetch versions history
-  const fetchVersions = async () => {
-    setLoadingVersions(true);
-    try {
-      const res = await fetch(`/api/versions?documentId=${documentId}`);
-      if (res.ok) {
-        const data = await res.json();
-        setVersions(data.versions || []);
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoadingVersions(false);
-    }
-  };
-
-  useEffect(() => {
-    if (sidebarOpen) {
-      fetchVersions();
-    }
-  }, [sidebarOpen]);
-
-  const handleCreateSnapshot = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!session?.user?.id) return;
-    setIsCreatingSnapshot(true);
-
-    try {
-      const summary = snapshotSummary.trim() || 'Manual Snapshot';
-
-      // Save locally
-      await createVersion(session.user.id, summary);
-
-      // Save to server
-      const res = await fetch('/api/versions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          documentId,
-          snapshot: JSON.stringify(blocks),
-          changeSummary: summary,
-        }),
-      });
-
-      if (res.ok) {
-        setSnapshotSummary('');
-        fetchVersions();
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsCreatingSnapshot(false);
-    }
-  };
-
-  const handleRestoreVersion = async (versionId: string) => {
-    if (!confirm('Are you sure you want to restore this version? This will generate history-safe merge operations.')) {
-      return;
-    }
-
-    try {
-      const res = await fetch('/api/versions/restore', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          documentId,
-          versionId,
-        }),
-      });
-
-      if (res.ok) {
-        setPreviewingSnapshot(null);
-        setSidebarOpen(false);
-        // Refresh local store content by reloading document
-        useEditorStore.getState().loadDocument(documentId);
-      } else {
-        const err = await res.json();
-        alert(err.error || 'Failed to restore version. Only document OWNERs can restore.');
-      }
-    } catch (e) {
-      console.error(e);
-    }
   };
 
   if (status === 'loading') {
@@ -186,7 +98,7 @@ export default function DocumentEditorPage() {
           </div>
           <h2 className="text-xl font-bold text-white mb-2">Access Denied</h2>
           <p className="text-sm text-neutral-400 mb-8">
-            You don't have permission to view this document or it doesn't exist. Please ask the owner to invite you.
+            {"You don't have permission to view this document or it doesn't exist. Please ask the owner to invite you."}
           </p>
           <Link
             href="/dashboard"
