@@ -20,8 +20,6 @@ export default function LandingPage() {
 
         <nav className="hidden md:flex items-center gap-6 text-sm text-neutral-400 font-medium">
           <a href="#features" className="hover:text-white transition-colors">Features</a>
-          <a href="#architecture" className="hover:text-white transition-colors">Architecture</a>
-          <a href="#security" className="hover:text-white transition-colors">Security</a>
         </nav>
 
         <div className="flex items-center gap-1.5 sm:gap-3">
