@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Sparkles, X, Loader2, Copy, Check, RotateCcw, Wand2, BookOpen, PenLine, SpellCheck } from 'lucide-react';
+import { FilePen, X, Loader2, Copy, Check, RotateCcw, Wand2, BookOpen, PenLine, SpellCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Block } from '@/lib/conflict/merge';
 
@@ -147,7 +147,7 @@ export function AIAssistant({ blocks, onClose }: AIAssistantProps) {
         <div className="flex-1 overflow-y-auto p-4 flex flex-col items-center justify-center h-full">
           <div className="relative shrink-0 mb-4">
             <div className="h-14 w-14 rounded-full bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
-              <Sparkles className="h-7 w-7 text-purple-400 animate-pulse" />
+              <FilePen className="h-7 w-7 text-purple-400 animate-pulse" />
             </div>
             <Loader2 className="absolute -inset-1.5 h-[68px] w-[68px] animate-spin text-purple-500/30" />
           </div>
@@ -159,7 +159,7 @@ export function AIAssistant({ blocks, onClose }: AIAssistantProps) {
           <div className="p-5 border-b border-neutral-900 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/30 flex items-center justify-center">
-                <Sparkles className="h-4 w-4 text-purple-400" />
+                <FilePen className="h-4 w-4 text-purple-400" />
               </div>
               <div>
                 <h3 className="font-bold text-sm text-white">AI Assistant</h3>
@@ -264,7 +264,7 @@ export function AIAssistant({ blocks, onClose }: AIAssistantProps) {
                   : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-lg shadow-purple-600/20'
               )}
             >
-              <Sparkles className="h-3.5 w-3.5" />
+              <FilePen className="h-3.5 w-3.5" />
               {result ? 'Regenerate' : 'Run AI'}
             </button>
           </div>

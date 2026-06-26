@@ -4,7 +4,7 @@ import React, { Suspense, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Sparkles, Globe, Loader2, AlertCircle } from 'lucide-react';
+import { Globe, Loader2, AlertCircle, FilePen } from 'lucide-react';
 
 function LoginForm() {
   const router = useRouter();
@@ -56,7 +56,7 @@ function LoginForm() {
       <div className="w-full max-w-md glass-panel border border-neutral-900 rounded-3xl p-8 shadow-2xl relative z-10">
         <div className="flex flex-col items-center mb-8">
           <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 mb-3">
-            <Sparkles className="h-6 w-6 text-white" />
+            <FilePen className="h-6 w-6 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">Welcome Back</h1>
           <p className="text-xs text-neutral-500 mt-1">Sign in to your HouseEditor workspace</p>
@@ -114,13 +114,13 @@ function LoginForm() {
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-neutral-900"></div>
           </div>
-          <span className="relative px-3 bg-[#030712] text-xs font-semibold text-neutral-500 uppercase tracking-wider">Or continue with</span>
+          <span className="relative px-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Or continue with</span>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 w-full gap-4">
           <button
             onClick={() => handleOAuthLogin('google')}
-            className="flex items-center justify-center gap-2 py-3 rounded-xl border border-neutral-900 hover:bg-neutral-900/40 text-sm font-semibold text-neutral-200 transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-neutral-900 hover:bg-neutral-900/40 text-sm font-semibold text-neutral-200 transition-colors"
           >
             <Globe className="h-4 w-4 text-rose-500" /> Google
           </button>

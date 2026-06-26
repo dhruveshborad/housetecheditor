@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Sparkles, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { FilePen, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -59,7 +59,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-md glass-panel border border-neutral-900 rounded-3xl p-8 shadow-2xl relative z-10">
         <div className="flex flex-col items-center mb-8">
           <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 mb-3">
-            <Sparkles className="h-6 w-6 text-white" />
+            <FilePen className="h-6 w-6 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">Create Account</h1>
           <p className="text-xs text-neutral-500 mt-1">Get started with HouseEditor for free</p>

@@ -8,8 +8,8 @@ import { localDb, type LocalDocument } from '@/lib/dexie/db';
 import { useEditorStore } from '@/lib/store/editor-store';
 import { ConnectionStatus } from '@/components/connection-status';
 import {
-  FileText, Plus, Database, Users, History, LogOut,
-  Settings, User, Sparkles, FolderOpen, RefreshCcw,
+  FileText, Plus, Database, LogOut,
+  Settings, User, FilePen, FolderOpen, RefreshCcw,
   AlertCircle, ShieldCheck, Activity, Layers
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -251,7 +251,7 @@ export default function Dashboard() {
       <header className="glass-panel sticky top-0 z-40 border-b border-neutral-900 px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center shadow-md shadow-indigo-500/10">
-            <Sparkles className="h-4.5 w-4.5 text-white" />
+            <FilePen className="h-4.5 w-4.5 text-white" />
           </div>
           <span className="font-bold text-base text-white">HouseEditor</span>
           <div className="h-4 w-px bg-neutral-800 hidden sm:block" />

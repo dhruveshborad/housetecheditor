@@ -11,7 +11,7 @@ import { ConnectionStatus } from '@/components/connection-status';
 import { ShareModal } from '@/components/share-modal';
 import { AIAssistant } from '@/components/ai-assistant';
 import {
-  ArrowLeft, History, Plus, Clock, Sparkles,
+  ArrowLeft, History, Plus, Clock, FilePen,
   Users, X, ChevronRight, Loader2, Share2
 } from 'lucide-react';
 import Link from 'next/link';
@@ -283,7 +283,7 @@ export default function DocumentEditorPage() {
                 : "bg-neutral-900 border-neutral-800 text-neutral-400 hover:text-white hover:border-neutral-700"
             )}
           >
-            <Sparkles className="h-4 w-4" />
+            <FilePen className="h-4 w-4" />
             <span className="hidden md:inline">AI</span>
           </button>
 

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Cloud, Shield, Zap, History, Network, Compass, Sparkles } from 'lucide-react';
+import { ArrowRight, Cloud, History, Network, FilePen } from 'lucide-react';
 
 export default function LandingPage() {
   return (
@@ -8,7 +8,7 @@ export default function LandingPage() {
       <header className="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-neutral-900 px-4 py-3 md:px-6 md:py-4 flex items-center justify-between">
         <div className="flex items-center gap-1.5 sm:gap-2">
           <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 shrink-0">
-            <Sparkles className="h-4 sm:h-5 sm:w-5 text-white" />
+            <FilePen className="h-4 sm:h-5 sm:w-5 text-white" />
           </div>
           <span className="font-bold text-base sm:text-lg tracking-tight bg-gradient-to-r from-white to-neutral-400 bg-clip-text text-transparent">
             HouseEditor
