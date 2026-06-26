@@ -11,7 +11,7 @@ export default function LandingPage() {
             <FilePen className="h-4 sm:h-5 sm:w-5 text-white" />
           </div>
           <span className="font-bold text-base sm:text-lg tracking-tight bg-gradient-to-r from-white to-neutral-400 bg-clip-text text-transparent">
-            HouseEditor
+            HousetechEditor
           </span>
           <span className="hidden sm:inline-flex text-[10px] px-1.5 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-semibold tracking-wider uppercase">
             SyncForge
@@ -116,7 +116,7 @@ export default function LandingPage() {
       <footer className="glass-panel border-t border-neutral-900 py-8 px-6 text-xs text-neutral-500">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-1.5">
-            <span className="font-semibold text-neutral-400">HouseEditor (SyncForge)</span>
+            <span className="font-semibold text-neutral-400">HousetechEditor (SyncForge)</span>
           </div>
 
           <div className="flex items-center gap-6">

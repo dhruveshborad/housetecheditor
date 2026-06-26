@@ -1,4 +1,4 @@
-name: HouseEditor CI/CD Pipeline
+name: HousetechEditor CI/CD Pipeline
 
 on:
   push:

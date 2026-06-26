@@ -253,7 +253,7 @@ export default function Dashboard() {
           <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center shadow-md shadow-indigo-500/10">
             <FilePen className="h-4.5 w-4.5 text-white" />
           </div>
-          <span className="font-bold text-base text-white">HouseEditor</span>
+          <span className="font-bold text-base text-white">HousetechEditor</span>
           <div className="h-4 w-px bg-neutral-800 hidden sm:block" />
           <div className="hidden sm:block">
             <ConnectionStatus />

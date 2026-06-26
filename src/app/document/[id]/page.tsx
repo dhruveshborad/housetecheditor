@@ -318,36 +318,6 @@ export default function DocumentEditorPage() {
       <div className="flex-1 max-w-6xl w-full mx-auto px-6 pt-8 flex flex-col lg:flex-row gap-6 relative">
         {/* Left Side: Editor Area */}
         <div className="flex-1 flex flex-col gap-6 min-w-0">
-          {/* Snapshot Preview Indicator Banner */}
-          {previewingSnapshot && (
-            <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between gap-4 text-amber-300 text-sm">
-              <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5 animate-pulse" />
-                <span>
-                  Previewing snapshot from{' '}
-                  <strong>{new Date(previewingSnapshot.createdAt).toLocaleString()}</strong> by{' '}
-                  <strong>{previewingSnapshot.author?.name || 'Unknown'}</strong>.
-                </span>
-              </div>
-              <div className="flex gap-2 shrink-0">
-                <button
-                  onClick={() => setPreviewingSnapshot(null)}
-                  className="px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-xs font-semibold hover:border-neutral-700 hover:text-white transition-colors"
-                >
-                  Exit Preview
-                </button>
-                {userRole === 'OWNER' && (
-                  <button
-                    onClick={() => handleRestoreVersion(previewingSnapshot.id)}
-                    className="px-3 py-1.5 rounded-lg bg-amber-600 text-xs font-semibold text-neutral-950 hover:bg-amber-500 transition-colors"
-                  >
-                    Restore Snapshot
-                  </button>
-                )}
-              </div>
-            </div>
-          )}
-
           {/* Render editor */}
           <div className="flex-1">
             <Editor documentId={documentId} />
@@ -360,95 +330,6 @@ export default function DocumentEditorPage() {
             blocks={blocks}
             onClose={() => setAiPanelOpen(false)}
           />
-        )}
-
-        {/* Right Side: Version History Sidebar */}
-        {sidebarOpen && (
-          <aside className={cn(
-            "flex flex-col glass-panel border border-neutral-900 shadow-2xl z-50 p-5",
-            "fixed inset-4 rounded-3xl md:inset-x-20 md:inset-y-10 lg:w-80 lg:h-[80vh] lg:sticky lg:top-28 lg:inset-auto lg:shrink-0 lg:z-20"
-          )}>
-            <div className="flex items-center justify-between mb-4 border-b border-neutral-900 pb-3">
-              <div className="flex items-center gap-2">
-                <History className="h-4 w-4 text-indigo-400" />
-                <h3 className="font-bold text-sm text-white">Version Timeline</h3>
-              </div>
-              <button
-                onClick={() => setSidebarOpen(false)}
-                className="p-1 rounded bg-neutral-950 border border-neutral-900 text-neutral-400 hover:text-white"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            </div>
-
-            {/* Create Snapshot Form */}
-            {userRole !== 'VIEWER' && (
-              <form onSubmit={handleCreateSnapshot} className="mb-4 space-y-2">
-                <input
-                  type="text"
-                  value={snapshotSummary}
-                  onChange={(e) => setSnapshotSummary(e.target.value)}
-                  placeholder="Snapshot summary (e.g. Added Table)"
-                  className="w-full px-3 py-2 rounded-xl bg-neutral-950 border border-neutral-900 text-xs text-white placeholder-neutral-600 focus:outline-none focus:border-indigo-500"
-                />
-                <button
-                  type="submit"
-                  disabled={isCreatingSnapshot || !snapshotSummary.trim()}
-                  className="w-full py-2 bg-neutral-900 border border-neutral-800 hover:border-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed text-xs font-bold text-neutral-300 transition-colors rounded-xl flex items-center justify-center gap-1"
-                >
-                  {isCreatingSnapshot ? (
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  ) : (
-                    <Plus className="h-3.5 w-3.5" />
-                  )}
-                  Create Snapshot
-                </button>
-              </form>
-            )}
-
-            {/* History List */}
-            <div className="flex-1 overflow-y-auto space-y-3 pr-1">
-              {loadingVersions ? (
-                <div className="text-center py-8 text-xs text-neutral-600 flex flex-col items-center gap-2">
-                  <Loader2 className="h-5 w-5 animate-spin text-indigo-500" />
-                  Loading history...
-                </div>
-              ) : versions.length > 0 ? (
-                versions.map((ver) => (
-                  <div
-                    key={ver.id}
-                    className={cn(
-                      "p-3.5 rounded-2xl border text-xs flex flex-col gap-2 transition-all cursor-pointer",
-                      previewingSnapshot?.id === ver.id
-                        ? "bg-amber-500/10 border-amber-500/30 text-amber-300"
-                        : "bg-neutral-950/40 border-neutral-900 text-neutral-400 hover:border-neutral-800 hover:text-neutral-300"
-                    )}
-                    onClick={() => {
-                      if (previewingSnapshot?.id === ver.id) {
-                        setPreviewingSnapshot(null);
-                      } else {
-                        setPreviewingSnapshot(ver);
-                      }
-                    }}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-neutral-200 truncate">{ver.changeSummary}</span>
-                      <ChevronRight className="h-3.5 w-3.5 opacity-60 shrink-0" />
-                    </div>
-
-                    <div className="flex items-center justify-between text-[10px] text-neutral-500 border-t border-neutral-900/60 pt-2 mt-1">
-                      <span>By: {ver.author?.name || 'System'}</span>
-                      <span>{new Date(ver.createdAt).toLocaleDateString()}</span>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-8 text-xs text-neutral-600 font-semibold">
-                  No version snapshots yet.
-                </div>
-              )}
-            </div>
-          </aside>
         )}
       </div>
 

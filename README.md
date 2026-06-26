@@ -1,4 +1,4 @@
-# HouseEditor (SyncForge)
+# HousetechEditor (SyncForge)
 
 A production-grade, local-first collaborative document editor built with **Next.js 16**, **React 19**, **Zustand**, **Dexie.js (IndexedDB)**, **Prisma**, **PostgreSQL**, **Auth.js (NextAuth)**, and **Socket.IO**.
 
@@ -6,7 +6,7 @@ A production-grade, local-first collaborative document editor built with **Next.
 
 ## 🏗️ Architecture Overview
 
-HouseEditor follows a strict **Offline-First / Local-First** architecture. Browser user interactions write directly to local memory (Zustand store) and are persisted immediately in IndexedDB (via Dexie.js). Background processes then synchronize local edits to the central PostgreSQL server.
+HousetechEditor follows a strict **Offline-First / Local-First** architecture. Browser user interactions write directly to local memory (Zustand store) and are persisted immediately in IndexedDB (via Dexie.js). Background processes then synchronize local edits to the central PostgreSQL server.
 
 ```
 Browser UI (TipTap) 

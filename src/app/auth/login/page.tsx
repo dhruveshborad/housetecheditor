@@ -59,7 +59,7 @@ function LoginForm() {
             <FilePen className="h-6 w-6 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">Welcome Back</h1>
-          <p className="text-xs text-neutral-500 mt-1">Sign in to your HouseEditor workspace</p>
+          <p className="text-xs text-neutral-500 mt-1">Sign in to your HousetechEditor workspace</p>
         </div>
 
         {error && (

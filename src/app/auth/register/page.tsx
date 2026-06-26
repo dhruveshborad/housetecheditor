@@ -62,7 +62,7 @@ export default function RegisterPage() {
             <FilePen className="h-6 w-6 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">Create Account</h1>
-          <p className="text-xs text-neutral-500 mt-1">Get started with HouseEditor for free</p>
+          <p className="text-xs text-neutral-500 mt-1">Get started with HousetechEditor for free</p>
         </div>
 
         {error && (

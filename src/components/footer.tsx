@@ -7,10 +7,7 @@ export function Footer() {
     <footer className="w-full bg-black/40 backdrop-blur-md border-t border-neutral-900/80 py-4 px-4 sm:px-6 mt-auto">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500">
         <div className="flex items-center gap-2">
-          <div className="h-5 w-5 rounded bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
-            <span className="font-bold text-[10px]">SF</span>
-          </div>
-          <span className="font-medium text-neutral-400">HouseEditor (SyncForge)</span>
+          <span className="font-medium text-neutral-400">HousetechEditor</span>
         </div>
 
         <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-4 gap-y-2 sm:gap-6">
