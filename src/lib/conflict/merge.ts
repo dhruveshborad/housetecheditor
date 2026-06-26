@@ -118,9 +118,10 @@ export function mergeOperations(
           const existing = blocksMap.get(payload.blockId);
           if (existing) {
             // Check for cycles before moving
-            const wouldCreateCycle = checkCycle(payload.blockId, payload.prevId, blocksMap);
+            const prevId = payload.prevId !== undefined ? payload.prevId : null;
+            const wouldCreateCycle = checkCycle(payload.blockId, prevId, blocksMap);
             if (!wouldCreateCycle) {
-              existing.prevId = payload.prevId !== undefined ? payload.prevId : null;
+              existing.prevId = prevId;
             }
           }
         }
